@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import {MegadraftEditor, editorStateFromRaw} from "megadraft"
+import 'megadraft/dist/css/megadraft.css'
+import icons from "megadraft/lib/icons";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {editorState: editorStateFromRaw(null)};
+  }
+
+  onChange = (editorState) => {
+    this.setState({editorState});
+  }
+  
+  render = () => {
+    
+    const styles = {
+      margin: 80,
+      border: "solid"
+    }
+    
+    const linkifyAction = [{
+      type: "entity",
+      label: "Link",
+      style: "link",
+      entity: "LINK",
+      icon: icons.LinkIcon
+    }]
+  
+    return (
+      <div style={styles}>
+        <MegadraftEditor
+          editorState={this.state.editorState}
+          onChange={this.onChange}
+          actions={linkifyAction}
+          maxSidebarButtons={0}/>
+
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App
